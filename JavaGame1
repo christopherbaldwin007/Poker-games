@@ -1,0 +1,107 @@
+import java.util.*;
+
+public class TexasHoldem {
+    private static final int INITIAL_CHIPS = 500;
+    private static final int ANTE = 20;
+    private static final String[] RANKS = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+    private static final int MAX_PLAYERS = 5;
+
+    private static class Player {
+        String name;
+        int chips;
+        List<String> hand;
+
+        Player(String name) {
+            this.name = name;
+            this.chips = INITIAL_CHIPS;
+            this.hand = new ArrayList<>();
+        }
+
+        void addCard(String card) {
+            hand.add(card);
+        }
+
+        void resetHand() {
+            hand.clear();
+        }
+    }
+
+    private static List<String> createDeck() {
+        List<String> deck = new ArrayList<>();
+        for (String rank : RANKS) {
+            deck.add(rank + "♠");
+            deck.add(rank + "♥");
+            deck.add(rank + "♦");
+            deck.add(rank + "♣");
+        }
+        Collections.shuffle(deck);
+        return deck;
+    }
+
+    private static void dealCards(List<Player> players, List<String> deck) {
+        for (Player player : players) {
+            player.addCard(deck.remove(deck.size() - 1)); // Deal 2 cards to each player
+            player.addCard(deck.remove(deck.size() - 1));
+        }
+    }
+
+    private static void revealCommunityCards(List<String> deck, List<String> communityCards) {
+        for (int i = 0; i < 5; i++) {
+            communityCards.add(deck.remove(deck.size() - 1)); // Deal 5 community cards
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Player> players = new ArrayList<>();
+        List<String> communityCards = new ArrayList<>();
+
+        System.out.println("Welcome to Texas Hold'em Poker!");
+
+        // Ask for the number of players
+        System.out.print("Are you the only player and would like bots? (yes/no): ");
+        String response = scanner.nextLine().trim().toLowerCase();
+
+        if (response.equals("yes")) {
+            int numComputerPlayers = new Random().nextInt(MAX_PLAYERS) + 1; // Random number of computer players
+            System.out.println("You will play against " + numComputerPlayers + " computer players.");
+            players.add(new Player("You"));
+            for (int i = 1; i <= numComputerPlayers; i++) {
+                players.add(new Player("Computer " + i));
+            }
+        } else {
+            System.out.print("Enter the number of players (including yourself): ");
+            int numPlayers = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            for (int i = 1; i <= numPlayers; i++) {
+                players.add(new Player("Player " + i));
+            }
+        }
+
+        // Collect antes
+        for (Player player : players) {
+            player.chips -= ANTE;
+        }
+
+        // Create and shuffle the deck
+        List<String> deck = createDeck();
+
+        // Deal cards
+        dealCards(players, deck);
+
+        // Reveal community cards
+        revealCommunityCards(deck, communityCards);
+
+        // Show hands
+        for (Player player : players) {
+            System.out.println(player.name + "'s hand: " + player.hand);
+        }
+
+        // Show community cards
+        System.out.println("Community cards: " + communityCards);
+
+        // Game logic would go here (betting rounds, determining winner, etc.)
+
+        scanner.close();
+    }
+}
