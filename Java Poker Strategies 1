@@ -1,0 +1,414 @@
+import java.util.*;
+
+class Player {
+    String name;
+    double bankroll;
+    String strategy;
+    double score;
+
+    public Player(String name, double bankroll, String strategy) {
+        this.name = name;
+        this.bankroll = bankroll;
+        this.strategy = strategy;
+        this.score = 0;
+    }
+
+    public void updateScore(double result) {
+        this.score += result;
+    }
+}
+
+class PokerGame {
+    private static final double ANTE = 10.0;
+    private static final int INITIAL_BANKROLL = 500;
+
+    public static void main(String[] args) {
+        List<Player> players = createPlayers();
+        playIndividualGames(players);
+        playGroupGames(players);
+        rankPlayers(players);
+    }
+
+    private static List<Player> createPlayers() {
+        List<Player> players = new ArrayList<>();
+        String[] strategies = {
+            "Tight-Aggressive", "Loose-Aggressive", "Positional Awareness", 
+            "Continuation Betting", "Semi-Bluffing", "Value Betting", 
+            "Check-Raising", "Stealing the Blinds", "Defending the Blinds", 
+            "Adjusting to Opponents", "Reading Board Texture", "Pot Control", 
+            "Slow Playing", "3-Betting Pre-Flop", "4-Betting Light", 
+            "Balancing Your Range", "Hand Reading", "Fold Equity", 
+            "Bet Sizing", "Understanding Pot Odds", "Implied Odds", 
+            "Equity Awareness", "Floating", "Double Barreling", 
+            "Triple Barreling", "Donk Betting", "Over-Betting", 
+            "Under-Betting", "Check-Calling", "Isolating Weak Players", 
+            "Avoiding Tilt", "Bankroll Management", "Table Selection", 
+            "Stack Size Awareness", "Effective Stack Play", "Bubble Play", 
+            "ICM Awareness", "Short-Stack Strategy", "Deep-Stack Strategy", 
+            "Exploiting Weak Tight Players", "Exploiting Loose Passive Players", 
+            "Reading Tells", "Avoiding Your Own Tells", "Snap Decisions", 
+            "Short-Handed Play", "Heads-Up Play", "Multi-Table Tournament Strategy", 
+            "Sit-and-Go Strategy", "Studying Hand Histories", "Continuous Learning", 
+            "Always All in"
+        };
+
+        for (int i = 0; i < strategies.length; i++) {
+            players.add(new Player("Player " + (i + 1), INITIAL_BANKROLL, strategies[i]));
+        }
+        return players;
+    }
+
+    private static void playIndividualGames(List<Player> players) {
+        for (int i = 0; i < players.size(); i++) {
+            for (int j = i + 1; j < players.size(); j++) {
+                playGame(players.get(i), players.get(j));
+            }
+        }
+    }
+
+    private static void playGroupGames(List<Player> players) {
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            Collections.shuffle(players);
+            List<Player> group = players.subList(0, 5);
+            for (int j = 0; j < group.size(); j++) {
+                for (int k = j + 1; k < group.size(); k++) {
+                    playGame(group.get(j), group.get(k));
+                }
+            }
+        }
+    }
+
+    private static void playGame(Player player1, Player player2) {
+        double result1 = applyStrategy(player1);
+        double result2 = applyStrategy(player2);
+        
+        player1.updateScore(result1);
+        player2.updateScore(result2);
+    }
+
+    private static double applyStrategy(Player player) {
+        switch (player.strategy) {
+            case "Tight-Aggressive":
+                return tightAggressive(player);
+            case "Loose-Aggressive":
+                return looseAggressive(player);
+            case "Positional Awareness":
+                return positionalAwareness(player);
+            case "Continuation Betting":
+                return continuationBetting(player);
+            case "Semi-Bluffing":
+                return semiBluffing(player);
+            case "Value Betting":
+                return valueBetting(player);
+            case "Check-Raising":
+                return checkRaising(player);
+            case "Stealing the Blinds":
+                return stealingTheBlinds(player);
+            case "Defending the Blinds":
+                return defendingTheBlinds(player);
+            case "Adjusting to Opponents":
+                return adjustingToOpponents(player);
+            case "Reading Board Texture":
+                return readingBoardTexture(player);
+            case "Pot Control":
+                return potControl(player);
+            case "Slow Playing":
+                return slowPlaying(player);
+            case "3-Betting Pre-Flop":
+                return threeBettingPreFlop(player);
+            case "4-Betting Light":
+                return fourBettingLight(player);
+            case "Balancing Your Range":
+                return balancingYourRange(player);
+            case "Hand Reading":
+                return handReading(player);
+            case "Fold Equity":
+                return foldEquity(player);
+            case "Bet Sizing":
+                return betSizing(player);
+            case "Understanding Pot Odds":
+                return understandingPotOdds(player);
+            case "Implied Odds":
+                return impliedOdds(player);
+            case "Equity Awareness":
+                return equityAwareness(player);
+            case "Floating":
+                return floating(player);
+            case "Double Barreling":
+                return doubleBarreling(player);
+            case "Triple Barreling":
+                return tripleBarreling(player);
+            case "Donk Betting":
+                return donkBetting(player);
+            case "Over-Betting":
+                return overBetting(player);
+            case "Under-Betting":
+                return underBetting(player);
+            case "Check-Calling":
+                return checkCalling(player);
+            case "Isolating Weak Players":
+                return isolatingWeakPlayers(player);
+            case "Avoiding Tilt":
+                return avoidingTilt(player);
+            case "Bankroll Management":
+                return bankrollManagement(player);
+            case "Table Selection":
+                return tableSelection(player);
+            case "Stack Size Awareness":
+                return stackSizeAwareness(player);
+            case "Effective Stack Play":
+                return effectiveStackPlay(player);
+            case "Bubble Play":
+                return bubblePlay(player);
+            case "ICM Awareness":
+                return icmAwareness(player);
+            case "Short-Stack Strategy":
+                return shortStackStrategy(player);
+            case "Deep-Stack Strategy":
+                return deepStackStrategy(player);
+            case "Exploiting Weak Tight Players":
+                return exploitingWeakTightPlayers(player);
+            case "Exploiting Loose Passive Players":
+                return exploitingLoosePassivePlayers(player);
+            case "Reading Tells":
+                return readingTells(player);
+            case "Avoiding Your Own Tells":
+                return avoidingYourOwnTells(player);
+            case "Snap Decisions":
+                return snapDecisions(player);
+            case "Short-Handed Play":
+                return shortHandedPlay(player);
+            case "Heads-Up Play":
+                return headsUpPlay(player);
+            case "Multi-Table Tournament Strategy":
+                return multiTableTournamentStrategy(player);
+            case "Sit-and-Go Strategy":
+                return sitAndGoStrategy(player);
+            case "Studying Hand Histories":
+                return studyingHandHistories(player);
+            case "Continuous Learning":
+                return continuousLearning(player);
+            case "Always All in":
+                return alwaysAllIn(player);
+            default:
+                return 0;
+        }
+    }
+
+    // Example implementations of strategies
+    private static double tightAggressive(Player player) {
+        // Simulate a win or loss based on a tight-aggressive strategy
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double looseAggressive(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double positionalAwareness(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double continuationBetting(Player player) {
+        return Math.random() < 0.65 ? ANTE : -ANTE; // 65% win rate
+    }
+
+    private static double semiBluffing(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double valueBetting(Player player) {
+        return Math.random() < 0.7 ? ANTE : -ANTE; // 70% win rate
+    }
+
+    private static double checkRaising(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+    private static double stealingTheBlinds(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double defendingTheBlinds(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double adjustingToOpponents(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double readingBoardTexture(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double potControl(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double slowPlaying(Player player) {
+        return Math.random() < 0.4 ? ANTE : -ANTE; // 40% win rate
+    }
+
+    private static double threeBettingPreFlop(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double fourBettingLight(Player player) {
+        return Math.random() < 0.45 ? ANTE : -ANTE; // 45% win rate
+    }
+
+    private static double balancingYourRange(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double handReading(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double foldEquity(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double betSizing(Player player) {
+        return Math.random() < 0.65 ? ANTE : -ANTE; // 65% win rate
+    }
+
+    private static double understandingPotOdds(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double impliedOdds(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double equityAwareness(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double floating(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double doubleBarreling(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double tripleBarreling(Player player) {
+        return Math.random() < 0.45 ? ANTE : -ANTE; // 45% win rate
+    }
+
+    private static double donkBetting(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double overBetting(Player player) {
+        return Math.random() < 0.4 ? ANTE : -ANTE; // 40% win rate
+    }
+
+    private static double underBetting(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double checkCalling(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double isolatingWeakPlayers(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double avoidingTilt(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double bankrollManagement(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double tableSelection(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double stackSizeAwareness(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double effectiveStackPlay(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double bubblePlay(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double icmAwareness(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double shortStackStrategy(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double deepStackStrategy(Player player) {
+        return Math.random() < 0.65 ? ANTE : -ANTE; // 65% win rate
+    }
+
+    private static double exploitingWeakTightPlayers(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double exploitingLoosePassivePlayers(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double readingTells(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double avoidingYourOwnTells(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double snapDecisions(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double shortHandedPlay(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double headsUpPlay(Player player) {
+        return Math.random() < 0.65 ? ANTE : -ANTE; // 65% win rate
+    }
+
+    private static double multiTableTournamentStrategy(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double sitAndGoStrategy(Player player) {
+        return Math.random() < 0.6 ? ANTE : -ANTE; // 60% win rate
+    }
+
+    private static double studyingHandHistories(Player player) {
+        return Math.random() < 0.5 ? ANTE : -ANTE; // 50% win rate
+    }
+
+    private static double continuousLearning(Player player) {
+        return Math.random() < 0.55 ? ANTE : -ANTE; // 55% win rate
+    }
+
+    private static double alwaysAllIn(Player player) {
+        return Math.random() < 0.4 ? ANTE : -ANTE; // 40% win rate
+    }
+
+    private static void rankPlayers(List<Player> players) {
+        players.sort((p1, p2) -> Double.compare(p2.score, p1.score)); // Sort by score descending
+        System.out.println("Player Rankings:");
+        for (Player player : players) {
+            double percentageScore = (player.score / INITIAL_BANKROLL) * 100;
+            System.out.printf("%s (Strategy: %s) - Score: %.2f (%.2f%%)\n", 
+                player.name, player.strategy, player.score, percentageScore);
+        }
+    }
+}
+ 
